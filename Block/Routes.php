@@ -98,7 +98,7 @@ class Routes extends AbstractDashboard
         $params = [
             'cht' => 'bhg',
             'chtt' => 'WebApi Metrics',
-            'chs' => '700x150',
+            'chs' => '800x600',
             'chd' => 't:' . implode('|', $chd),
             'chdl' => implode('|', $chdl),
             'chma' => '0,0,10,10',
