@@ -3,6 +3,7 @@
 namespace FireGento\WebapiMetrics\Plugin;
 
 use DateTimeInterface;
+use FireGento\WebapiMetrics\Api\ConfigInterface;
 use FireGento\WebapiMetrics\Api\Data\LoggingEntryInterface;
 use FireGento\WebapiMetrics\Api\Data\LoggingEntryInterfaceFactory;
 use FireGento\WebapiMetrics\Api\LoggingEntryRepositoryInterface;
@@ -58,6 +59,11 @@ class ResponsePlugin
     private $storeManager;
 
     /**
+     * @var \FireGento\WebapiMetrics\Api\ConfigInterface
+     */
+    private ConfigInterface $config;
+
+    /**
      * ResponsePlugin constructor.
      * @param \FireGento\WebapiMetrics\Api\Data\LoggingEntryInterfaceFactory $loggingEntryInterfaceFactory
      * @param \FireGento\WebapiMetrics\Api\LoggingEntryRepositoryInterface $loggingEntryRepository
@@ -67,6 +73,7 @@ class ResponsePlugin
      * @param \Magento\Framework\Webapi\Rest\Request $request
      * @param \Magento\Framework\Webapi\Rest\Response $response
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \FireGento\WebapiMetrics\Api\ConfigInterface $config
      */
     public function __construct(
         LoggingEntryInterfaceFactory $loggingEntryInterfaceFactory,
@@ -76,7 +83,8 @@ class ResponsePlugin
         TimezoneInterface $timezone,
         Request $request,
         Response $response,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        ConfigInterface $config
     ) {
         $this->inputParamsResolver = $inputParamsResolver;
         $this->loggingEntryInterfaceFactory = $loggingEntryInterfaceFactory;
@@ -86,6 +94,7 @@ class ResponsePlugin
         $this->response = $response;
         $this->loggingEntryRepository = $loggingEntryRepository;
         $this->storeManager = $storeManager;
+        $this->config = $config;
     }
 
     /**
@@ -118,6 +127,10 @@ class ResponsePlugin
 
     public function afterSendResponse(ResponseInterface $subject, $result)
     {
+        if (!$this->config->isMetricLoggingEnabled()) {
+            return $result;
+        }
+
         try {
             $this->saveLoggingEntry(
                 $this->request->getMethod(),
