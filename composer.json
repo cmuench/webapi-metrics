@@ -3,7 +3,8 @@
   "description":"Webapi Metrics",
   "require": {
       "php": "~7.3.0||~7.4.0",
-      "magento/module-backend": "*"
+      "magento/module-backend": "*",
+      "magento/module-webapi": "*"
   },
   "type":"magento2-module",
   "license": "MIT",

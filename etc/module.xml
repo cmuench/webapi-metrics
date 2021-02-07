@@ -3,6 +3,7 @@
     <module name="FireGento_WebapiMetrics" >
         <sequence>
             <module name="Magento_Backend"/>
+            <module name="Magento_Webapi"/>
         </sequence>
     </module>
 </config>
